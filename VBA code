@@ -1,0 +1,62 @@
+Sub 统计()
+Dim i&
+Dim myrange As Range
+Dim Avalue$
+Dim Bvalue$
+Dim Vcolor$
+
+i = 4                           '从第4行开始遍历
+Range("C:C").Delete    '删除货架
+Cells(3, 11).Value = "颜色长度"
+Cells(3, 12).Value = "合并款号"
+Do
+If Cells(i, 1).Value Like "*童*" Then '删除童装
+    Rows(i).Delete
+Else
+        If Cells(i, 2).Value = "小计" Then '删除小计行
+            Rows(i).Delete
+        End If
+    Set myrange = Range("A" & i)
+        If myrange.MergeArea.Address = myrange.Address Then
+               'Avalue = Cells(i, 1).Value
+        Else
+                myrange.MergeArea.MergeCells = False
+                myrange.MergeArea.UnMerge
+                Avalue = Cells(i, 1).Value
+                Cells(i, 1).Select
+                Selection.HorizontalAlignment = Excel.xlLeft
+        End If
+    Set myrange = Nothing
+    Set myrange = Range("B" & i)
+        If myrange.MergeArea.Address = myrange.Address Then
+                'Avalue = Cells(i, 1).Value
+        Else
+                myrange.MergeArea.MergeCells = False
+                myrange.MergeArea.UnMerge
+                Bvalue = Cells(i, 2).Value
+        End If
+    Set myrange = Nothing
+    Vcolor = Cells(i, 5).Value
+    Cells(i, 11).Value = Len(Vcolor)  '合并款号代码
+
+        If Cells(i, 11).Value = 4 Then
+            Cells(i, 12).Value = Bvalue & Vcolor
+        ElseIf Cells(i, 11).Value = 3 Then
+            Cells(i, 12).Value = Bvalue & "0" & Vcolor
+        Else: Cells(i, 11).Value = 2
+            Cells(i, 12).Value = Bvalue & "00" & Vcolor
+        End If
+        
+        If Cells(i, 1).Value = "" Then
+                Cells(i, 1).Value = Avalue
+                 Cells(i, 1).Select
+                Selection.HorizontalAlignment = Excel.xlLeft
+        End If
+        If Cells(i, 2).Value = "" Then
+                Cells(i, 2).Value = Bvalue
+        End If
+End If
+ i = i + 1
+ Loop Until Cells(i, 9).Value = ""
+MsgBox "亲！已经处理完！请查收！"
+End Sub
