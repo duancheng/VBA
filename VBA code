@@ -1,3 +1,5 @@
+'程序是自己写给货控的小插件，根据货控的职能需求而编写的
+
 Sub 统计()
 Dim i&
 Dim myrange As Range
